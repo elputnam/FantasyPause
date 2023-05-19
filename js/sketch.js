@@ -7,8 +7,19 @@ let shade = 0;
 //Bird flock
 let flock
 
+//CCapture
+// var capture = false; // default is to not capture frames, can be changed with button in browser
+var capturer = new CCapture({
+  format:'webm', 
+  workersPath: 'js/',
+  framerate: 20
+});
+
+const NUM_FRAMES = 6000;
+
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  //createCanvas(windowWidth, windowHeight);
+  createCanvas(1920, 1080);
   colorMode(HSB, 360, 100, 100, 100);
   frameRate(20);
   //background(200, 100, 50);
@@ -23,6 +34,7 @@ function setup() {
 }
 
 function draw() {
+  if (frameCount==1) capturer.start(); // start the animation capture
   // background(H1, 30, 100, 1);
   // background(200, 100, 50, 20);
   background(0, 10);
@@ -38,6 +50,12 @@ function draw() {
   // if (frameCount >= 100){
     
   // }
+
+  capturer.capture(document.getElementById('defaultCanvas0'));  
+    if (frameCount==6000){
+      save_record();
+    }
+    print(frameCount);
 }
 
 class Flock {
@@ -56,15 +74,15 @@ class Flock {
   }
 }
 
-function mousePressed(){
-  let fs = fullscreen();
-  fullscreen(!fs);
-}
+// function mousePressed(){
+//   let fs = fullscreen();
+//   fullscreen(!fs);
+// }
 
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-  background(0);
-}
+// function windowResized() {
+//   resizeCanvas(windowWidth, windowHeight);
+//   background(0);
+// }
 
 class Bird {
   constructor(x, y) {
@@ -249,4 +267,8 @@ class Bird {
       return createVector(0, 0);
     }
   }
+}
+
+function save_record() {
+  capturer.save();
 }
